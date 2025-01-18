@@ -8,6 +8,19 @@ from typing import List
 
 def get_document_chunks(file_path, chunk_size=500, chunk_overlap=50):
     """
+    Splits a document into chunks of text based on the specified chunk size and overlap.
+
+    This function loads a DOCX file from the given file path, splits its content into smaller chunks 
+    using the RecursiveCharacterTextSplitter, and returns a list of text chunks. Each chunk has a 
+    maximum size of `chunk_size` characters with an optional overlap between consecutive chunks.
+
+    Args:
+        file_path (str): The path to the DOCX file to be loaded and split into chunks.
+        chunk_size (int, optional): The maximum number of characters in each chunk (default is 500).
+        chunk_overlap (int, optional): The number of overlapping characters between consecutive chunks (default is 50).
+
+    Returns:
+        list of str: A list of text chunks extracted from the document.
     """
     loader = Docx2txtLoader(file_path)
     documents = loader.load()
@@ -22,6 +35,19 @@ def get_document_chunks(file_path, chunk_size=500, chunk_overlap=50):
 def persist_chroma(doc_paths: List[str],
                    persist_path: str):
     """
+    Loads, chunks, embeds, and stores documents in a Chroma database with persistence.
+
+    This function processes a list of document file paths, splits each document into chunks, 
+    generates embeddings using the OpenAI 'text-embedding-ada-002' model, and stores the 
+    chunks and their embeddings in a Chroma database. The database is persisted at the specified 
+    `persist_path`. Each document is stored with its metadata, including the title and text content.
+
+    Args:
+        doc_paths (List[str]): A list of file paths to the documents (in DOCX format) to be processed.
+        persist_path (str): The file path where the Chroma database will be stored.
+
+    Returns:
+        None: This function does not return any values, but prints a success message when the process is complete.
     """
     client = chromadb.Client()
     client = chromadb.PersistentClient(path=persist_path)

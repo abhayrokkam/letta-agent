@@ -16,7 +16,7 @@ def get_sanjay_information(query: str):
     vectordb = Chroma(
         collection_name='sanjay_sarma',
         embedding_function=vdb_embed_model,
-        persist_directory="../chromadb")
+        persist_directory="./chromadb")
     
     text = ""
     results = vectordb.similarity_search(query, k=5)
