@@ -63,6 +63,8 @@ def get_response(query: str,
             - client_response: The full response object from the LettA client after sending the query.
             - reply_message (str): The specific reply message extracted from the client response.
     """
+    reply_message = ""
+    
     client_response = letta_client.send_message(
         agent_id=agent_state.id, 
         message=query, 

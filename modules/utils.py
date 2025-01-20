@@ -1,6 +1,6 @@
 import chromadb
 from langchain_openai import OpenAIEmbeddings
-from langchain.document_loaders import Docx2txtLoader
+from langchain_community.document_loaders import Docx2txtLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 import re
