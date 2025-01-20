@@ -2,6 +2,7 @@ import letta
 import letta.client
 from letta.schemas.memory import ChatMemory
 
+import json
 from .prompts import sanjay_persona, system_prompt
 from .tools import get_sanjay_information
 
@@ -45,3 +46,33 @@ def create_sanjay_client():
     
     print(f"Created agent with name {agent_state.name} and unique ID {agent_state.id}") 
     return letta_client, agent_state
+
+def get_response(query: str,
+                 letta_client,
+                 agent_state):
+    """
+    Sends a query message to a client using the provided LettA client and agent state, and retrieves the response.
+
+    Args:
+        query (str): The query message to be sent to the client.
+        letta_client: The LettA client instance responsible for sending and receiving messages.
+        agent_state: The state of the agent, used to identify the agent and manage interactions.
+
+    Returns:
+        tuple: A tuple containing:
+            - client_response: The full response object from the LettA client after sending the query.
+            - reply_message (str): The specific reply message extracted from the client response.
+    """
+    client_response = letta_client.send_message(
+        agent_id=agent_state.id, 
+        message=query, 
+        role="user" 
+    )
+    
+    for message in client_response.dict()['messages']:
+        if message.get('message_type') == 'tool_call_message' and message.get('tool_call', {}).get('name') == 'send_message':
+            message_reply = message['tool_call']['arguments']
+            
+            reply_message = json.loads(message_reply)['message']
+    
+    return client_response, reply_message
