@@ -1,5 +1,7 @@
 import os
+import json
 from dotenv import load_dotenv
+
 import streamlit as st
 from langchain_core.messages import HumanMessage, AIMessage
 
@@ -33,6 +35,12 @@ letta_client, agent_state = load_client()
 # Creating empty chat_history in session
 if "chat_history" not in st.session_state:
     st.session_state.chat_history = []
+    
+if "reasoning_history" not in st.session_state:
+    st.session_state.reasoning_history = []
+
+if "tool_call_history" not in st.session_state:
+    st.session_state.tool_call_history = []
 
 # Conversation history
 for message in st.session_state.chat_history:
@@ -52,9 +60,22 @@ if user_query is not None and user_query != "":
         st.markdown(user_query)
     
     with st.chat_message("Sanjay"):
-        client_response, reply = get_response(user_query,
-                                            letta_client=letta_client,
-                                            agent_state=agent_state)
-        st.markdown(reply)
+        client_response = get_response(user_query,
+                                        letta_client=letta_client,
+                                        agent_state=agent_state)
+        
+        # Response filtering
+        response_messages = json.loads(str(client_response))['messages']
+        for message in response_messages:
+            if message['message_type'] == 'reasoning_message':
+                st.session_state.reasoning_history.append(message['reasoning'])
+            if message['message_type'] == 'tool_call_message':
+                if message['tool_call']['name'] == 'send_message':
+                    agent_reply = json.loads(message['tool_call']['arguments'])['message']
+                    st.session_state.chat_history.append(agent_reply)
+                else:
+                    st.session_state.tool_call_history.append(message['tool_call'])
+        
+        st.markdown(agent_reply)
     
-    st.session_state.chat_history.append(AIMessage(reply))
+    st.session_state.chat_history.append(AIMessage(agent_reply))

@@ -1,8 +1,10 @@
+from dotenv import load_dotenv
+load_dotenv()
+
 import letta
 import letta.client
 from letta.schemas.memory import ChatMemory
 
-import json
 from .prompts import sanjay_persona, system_prompt
 from .tools import get_sanjay_information
 
@@ -71,10 +73,4 @@ def get_response(query: str,
         role="user" 
     )
     
-    for message in client_response.dict()['messages']:
-        if message.get('message_type') == 'tool_call_message' and message.get('tool_call', {}).get('name') == 'send_message':
-            message_reply = message['tool_call']['arguments']
-            
-            reply_message = json.loads(message_reply)['message']
-    
-    return client_response, reply_message
+    return client_response
