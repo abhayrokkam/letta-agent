@@ -70,6 +70,7 @@ if user_query is not None and user_query != "":
             if message['message_type'] == 'reasoning_message':
                 st.session_state.reasoning_history.append(message['reasoning'])
             if message['message_type'] == 'tool_call_message':
+                agent_reply = "TRY AGAIN"
                 if message['tool_call']['name'] == 'send_message':
                     agent_reply = json.loads(message['tool_call']['arguments'])['message']
                     st.session_state.chat_history.append(agent_reply)
