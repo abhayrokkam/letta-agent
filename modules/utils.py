@@ -4,6 +4,7 @@ from langchain_community.document_loaders import Docx2txtLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 import re
+import json
 from typing import List
 
 def get_document_chunks(file_path, chunk_size=500, chunk_overlap=50):
@@ -77,3 +78,25 @@ def persist_chroma(doc_paths: List[str],
         )
     
     print("Documents have been loaded, chunked, embedded, and stored in the database successfully!")
+    
+def response_filter(letta_response) -> str:
+    """
+    Extracts the agent's reply from the Letta agent's response.
+
+    This function filters the response to return the message from the agent,
+    particularly when the message type is 'tool_call_message' and the tool is 'send_message'.
+
+    Args:
+        letta_response (str or dict): The Letta agent's response.
+
+    Returns:
+        str: The agent's reply, or "TRY AGAIN" if no valid message is found.
+    """
+    response_messages = json.loads(str(letta_response))['messages']
+    for message in response_messages:
+        if message['message_type'] == 'tool_call_message':
+            agent_reply = "TRY AGAIN"
+            if message['tool_call']['name'] == 'send_message':
+                agent_reply = json.loads(message['tool_call']['arguments'])['message']
+            
+    return agent_reply
