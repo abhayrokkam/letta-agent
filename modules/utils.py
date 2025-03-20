@@ -81,22 +81,19 @@ def persist_chroma(doc_paths: List[str],
     
 def response_filter(letta_response) -> str:
     """
-    Extracts the agent's reply from the Letta agent's response.
-
-    This function filters the response to return the message from the agent,
-    particularly when the message type is 'tool_call_message' and the tool is 'send_message'.
+    Extracts the agent reply from a letta_response object.
 
     Args:
-        letta_response (str or dict): The Letta agent's response.
+        letta_response (LettaResponse): The response object containing a list of messages.
 
     Returns:
-        str: The agent's reply, or "TRY AGAIN" if no valid message is found.
+        str: The extracted reply from a 'send_message' tool call, or a default error message if not found.
     """
-    response_messages = json.loads(str(letta_response))['messages']
-    for message in response_messages:
-        if message['message_type'] == 'tool_call_message':
-            agent_reply = "TRY AGAIN"
-            if message['tool_call']['name'] == 'send_message':
-                agent_reply = json.loads(message['tool_call']['arguments'])['message']
+    agent_reply = 'There was an internal error, could you please try again?'
+
+    for message in letta_response.messages:
+        if message.message_type == 'tool_call_message':
+            if message.tool_call.name == 'send_message':
+                agent_reply = json.loads(message.tool_call.arguments)['message']
             
     return agent_reply
