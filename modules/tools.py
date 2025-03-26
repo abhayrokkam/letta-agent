@@ -19,7 +19,7 @@ def get_sanjay_information(query: str):
         persist_directory="./chromadb")
     
     text = ""
-    results = vectordb.similarity_search(query, k=5)
+    results = vectordb.similarity_search(query, k=4)
     for result in results:
         text += result.page_content
     return text
