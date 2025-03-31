@@ -2,11 +2,11 @@
 
 ## Introduction  
 
-This project demonstrates an **agentic workflow** in conversational agents using the **Letta** Framework. In an agentic workflow, every user message is routed to an agent, which autonomously decides how to handle it. The agent leverages a set of tools to process user inputs effectively.  
+This project demonstrates an **agentic workflow** in conversational agents using the **Letta** framework. In an agentic workflow, every user message is routed to an agent, which autonomously decides how to handle it. The agent leverages a set of tools to process user inputs effectively.  
 
 The agent in this project embodies the persona of a well-known tech enthusiast. It is designed to:  
 - Remember important details about the user using a memory module.  
-- Extract personal information about the persona using a Retrieval-Augmented Generation.  
+- Extract personal information about the persona using Retrieval-Augmented Generation.  
 
 This enables a more personalized, interactive, and context-aware AI experience, making it ideal for applications like AI companions, virtual assistants, and domain-specific chatbots.
 
@@ -74,7 +74,7 @@ This project showcases an **agentic workflow** using the **Letta** framework, in
 
 ```
 Core Framework   |   Letta
-Language Model   |   o1-mini (OpenAI)
+Language Model   |   gpt-4o-mini
 Vector Database  |   Chroma DB
 User Interface   |   Streamlit
 ```

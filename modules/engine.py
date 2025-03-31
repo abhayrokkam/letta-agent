@@ -24,7 +24,7 @@ def create_sanjay_client():
     """
     # Creating the letta_client and setting default LLM and Embedding Model
     letta_client = letta.create_client()
-    letta_client.set_default_llm_config(letta.LLMConfig.default_config("o1-mini")) 
+    letta_client.set_default_llm_config(letta.LLMConfig.default_config("gpt-4o-mini")) 
     letta_client.set_default_embedding_config(letta.EmbeddingConfig.default_config("text-embedding-ada-002"))
 
     # Setting agent name

@@ -1,4 +1,5 @@
 import os
+import subprocess
 import json
 from dotenv import load_dotenv
 
@@ -6,7 +7,7 @@ import streamlit as st
 from langchain_core.messages import HumanMessage, AIMessage
 
 from modules.engine import create_sanjay_client, get_response
-from modules.utils import persist_chroma, response_filter
+from modules.utils import persist_chroma
 
 # Loading env file
 load_dotenv()
